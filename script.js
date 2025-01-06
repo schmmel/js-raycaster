@@ -25,14 +25,19 @@ const map = [
     [1, 1, 1, 1, 1, 1, 1, 1]
 ];
 
-let playerX = 3, playerY = 3;
-let dirX = .5, dirY = .5;
-let planeX = 0, planeY = (2 / 3);
+let playerX = 2.5, playerY = 3;
+let dirX = 0, dirY = -1;
+let planeX = .85, planeY = 0;
 
-let wallColor = [128, 0, 128]
+let wallColor = [128, 0, 128];
 
 let time = 0;
 let oldTime = 0;
+let deltaTime = 0;
+
+let keys = {};
+document.addEventListener("keydown", (e) => { keys[e.key] = true; });
+document.addEventListener("keyup", (e) => { keys[e.key] = false; });
 
 function raycast() {
     for (let x = 0; x < screenWidth; x++) {
@@ -41,8 +46,8 @@ function raycast() {
         let rayDirX = dirX + planeX * cameraX;
         let rayDirY = dirY + planeY * cameraX;
 
-        let mapX = playerX;
-        let mapY = playerY;
+        let mapX = Math.floor(playerX);
+        let mapY = Math.floor(playerY);
 
         let sideDistX;
         let sideDistY;
@@ -101,13 +106,13 @@ function raycast() {
         drawStart = -lineHeight / 2 + screenHeight / 2;
         drawEnd = lineHeight / 2 + screenHeight / 2;
 
-        if (drawStart < 0) { drawStart = 0; }
-        if (drawEnd >= screenHeight) { drawEnd = screenHeight - 1; }
+        if (drawStart < 0) { drawStart = 0; };
+        if (drawEnd >= screenHeight) { drawEnd = screenHeight - 1; };
 
         // slightly darker colors on walls on the y(?) axis
         let color = wallColor;
         if (side === 1) {
-            color = [color[0] * 0.85, color[1] * 0.85, color[2] * 0.85]
+            color = [color[0] * 0.80, color[1] * 0.80, color[2] * 0.80]
         }
 
         drawLine(x, drawStart, drawEnd, color);
@@ -124,12 +129,52 @@ function drawLine(x, y1, y2, color) {
     ctx.stroke();
 }
 
+function movement() {
+    // get delta time
+    oldTime = time;
+    time = Date.now();
+    deltaTime = (time - oldTime) / 1000;
+
+    let moveSpeed = deltaTime * 5;
+    let rotateSpeed = deltaTime * 2;
+
+    if (keys["w"]) {
+        if (map[Math.floor(playerY)][Math.floor(playerX + dirX * moveSpeed)] === 0) { playerX += dirX * moveSpeed; }
+        if (map[Math.floor(playerY + dirY * moveSpeed)][Math.floor(playerX)] === 0) { playerY += dirY * moveSpeed; }
+    }
+
+    if (keys["s"]) {
+        if (map[Math.floor(playerY)][Math.floor(playerX - dirX * moveSpeed)] === 0) { playerX -= dirX * moveSpeed; }
+        if (map[Math.floor(playerY - dirY * moveSpeed)][Math.floor(playerX)] === 0) { playerY -= dirY * moveSpeed; }
+    }
+
+    if (keys["a"]) {
+        let oldDirX = dirX;
+        dirX = dirX * Math.cos(-rotateSpeed) - dirY * Math.sin(-rotateSpeed);
+        dirY = oldDirX * Math.sin(-rotateSpeed) + dirY * Math.cos(-rotateSpeed);
+        let oldPlaneX = planeX;
+        planeX = planeX * Math.cos(-rotateSpeed) - planeY * Math.sin(-rotateSpeed);
+        planeY = oldPlaneX * Math.sin(-rotateSpeed) + planeY * Math.cos(-rotateSpeed);
+    }
+
+    if (keys["d"]) {
+        let oldDirX = dirX;
+        dirX = dirX * Math.cos(rotateSpeed) - dirY * Math.sin(rotateSpeed);
+        dirY = oldDirX * Math.sin(rotateSpeed) + dirY * Math.cos(rotateSpeed);
+        let oldPlaneX = planeX;
+        planeX = planeX * Math.cos(rotateSpeed) - planeY * Math.sin(rotateSpeed);
+        planeY = oldPlaneX * Math.sin(rotateSpeed) + planeY * Math.cos(rotateSpeed);
+    }
+}
+
 // gameloop
 function loop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // do the magic
     raycast();
+
+    movement();
 
     requestAnimationFrame(loop);
 }
