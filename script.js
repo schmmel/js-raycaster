@@ -114,7 +114,7 @@ function raycast() {
 
         let color = wallColors[map[mapY][mapX]];
 
-        // slightly darker colors on walls one of the axises
+        // slightly darker colors on walls one of the axes
         if (side === 1) {
             color = [color[0] * 0.80, color[1] * 0.80, color[2] * 0.80]
         }
@@ -153,6 +153,16 @@ function movement() {
     }
 
     if (keys["a"]) {
+        if (map[Math.floor(playerY)][Math.floor(playerX - dirX * moveSpeed)] === 0) { playerX += dirY * moveSpeed; }
+        if (map[Math.floor(playerY - dirY * moveSpeed)][Math.floor(playerX)] === 0) { playerY -= dirX * moveSpeed; }
+    }
+
+    if (keys["d"]) {
+        if (map[Math.floor(playerY)][Math.floor(playerX - dirX * moveSpeed)] === 0) { playerX -= dirY * moveSpeed; }
+        if (map[Math.floor(playerY - dirY * moveSpeed)][Math.floor(playerX)] === 0) { playerY += dirX * moveSpeed; }
+    }
+
+    if (keys["ArrowLeft"]) {
         let oldDirX = dirX;
         dirX = dirX * Math.cos(-rotateSpeed) - dirY * Math.sin(-rotateSpeed);
         dirY = oldDirX * Math.sin(-rotateSpeed) + dirY * Math.cos(-rotateSpeed);
@@ -161,7 +171,7 @@ function movement() {
         planeY = oldPlaneX * Math.sin(-rotateSpeed) + planeY * Math.cos(-rotateSpeed);
     }
 
-    if (keys["d"]) {
+    if (keys["ArrowRight"]) {
         let oldDirX = dirX;
         dirX = dirX * Math.cos(rotateSpeed) - dirY * Math.sin(rotateSpeed);
         dirY = oldDirX * Math.sin(rotateSpeed) + dirY * Math.cos(rotateSpeed);
