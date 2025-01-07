@@ -16,12 +16,12 @@ const ctx = canvas.getContext("2d");
 
 const map = [
     [1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 0, 1, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 1, 0, 1],
-    [1, 0, 0, 0, 0, 1, 0, 1],
+    [1, 0, 2, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 2, 0, 1],
+    [1, 0, 0, 0, 0, 2, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 1, 1, 1, 1],
-    [1, 1, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 2, 2, 2, 1],
+    [1, 2, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1]
 ];
 
@@ -29,7 +29,10 @@ let playerX = 2.5, playerY = 3;
 let dirX = 0, dirY = -1;
 let planeX = .85, planeY = 0;
 
-let wallColor = [128, 0, 128];
+let wallColors = {
+    1: [128, 0, 128],
+    2: [223, 12, 68]
+};
 
 let time = 0;
 let oldTime = 0;
@@ -109,8 +112,9 @@ function raycast() {
         if (drawStart < 0) { drawStart = 0; };
         if (drawEnd >= screenHeight) { drawEnd = screenHeight - 1; };
 
-        // slightly darker colors on walls on the y(?) axis
-        let color = wallColor;
+        let color = wallColors[map[mapY][mapX]];
+
+        // slightly darker colors on walls one of the axises
         if (side === 1) {
             color = [color[0] * 0.80, color[1] * 0.80, color[2] * 0.80]
         }
