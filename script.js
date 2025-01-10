@@ -14,18 +14,7 @@ canvas.height = screenHeight;
 
 const ctx = canvas.getContext("2d");
 
-const map = [
-    [1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 0, 2, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 2, 0, 1],
-    [1, 0, 0, 0, 0, 2, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 2, 2, 2, 1],
-    [1, 2, 0, 0, 0, 0, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1]
-];
-
-let playerX = 2.5, playerY = 3;
+let playerX = 2.5, playerY = 13;
 let dirX = 0, dirY = -1;
 let planeX = .85, planeY = 0;
 
@@ -39,8 +28,8 @@ let oldTime = 0;
 let deltaTime = 0;
 
 let keys = {};
-document.addEventListener("keydown", (e) => { keys[e.key] = true; });
-document.addEventListener("keyup", (e) => { keys[e.key] = false; });
+document.addEventListener("keydown", (e) => { keys[e.code] = true; });
+document.addEventListener("keyup", (e) => { keys[e.code] = false; });
 
 function raycast() {
     for (let x = 0; x < screenWidth; x++) {
@@ -140,24 +129,24 @@ function movement() {
     deltaTime = (time - oldTime) / 1000;
 
     let moveSpeed = deltaTime * 5;
-    let rotateSpeed = deltaTime * 2;
+    let rotateSpeed = deltaTime * 2.5;
 
-    if (keys["w"]) {
+    if (keys["KeyW"]) {
         if (map[Math.floor(playerY)][Math.floor(playerX + dirX * moveSpeed)] === 0) { playerX += dirX * moveSpeed; }
         if (map[Math.floor(playerY + dirY * moveSpeed)][Math.floor(playerX)] === 0) { playerY += dirY * moveSpeed; }
     }
 
-    if (keys["s"]) {
+    if (keys["KeyS"]) {
         if (map[Math.floor(playerY)][Math.floor(playerX - dirX * moveSpeed)] === 0) { playerX -= dirX * moveSpeed; }
         if (map[Math.floor(playerY - dirY * moveSpeed)][Math.floor(playerX)] === 0) { playerY -= dirY * moveSpeed; }
     }
 
-    if (keys["a"]) {
+    if (keys["KeyA"]) {
         if (map[Math.floor(playerY)][Math.floor(playerX + dirY * moveSpeed)] === 0) { playerX += dirY * moveSpeed; }
         if (map[Math.floor(playerY - dirX * moveSpeed)][Math.floor(playerX)] === 0) { playerY -= dirX * moveSpeed; }
     }
 
-    if (keys["d"]) {
+    if (keys["KeyD"]) {
         if (map[Math.floor(playerY)][Math.floor(playerX - dirY * moveSpeed)] === 0) { playerX -= dirY * moveSpeed; }
         if (map[Math.floor(playerY + dirX * moveSpeed)][Math.floor(playerX)] === 0) { playerY += dirX * moveSpeed; }
     }
