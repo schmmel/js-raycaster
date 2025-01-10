@@ -122,6 +122,14 @@ function drawLine(x, y1, y2, color) {
     ctx.stroke();
 }
 
+function drawCeilingFloor(ceilingColor, floorColor) {
+    // ceiling
+    ctx.fillStyle = `#0000ff`;
+    ctx.beginPath();
+    ctx.rect(0, 0, canvas.width, canvas.height / 2);
+    ctx.fill();
+}
+
 function movement() {
     // get delta time
     oldTime = time;
@@ -173,6 +181,9 @@ function movement() {
 // gameloop
 function loop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // draw ceiling and floor
+    // drawCeilingFloor();
 
     // do the magic
     raycast();
