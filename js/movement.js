@@ -61,7 +61,6 @@ function movement() {
         planeY = oldPlaneX * Math.sin(rotateSpeed) + planeY * Math.cos(rotateSpeed);
     }
 
-    console.log(mouseMovementX)
     // divided by 100 because raw values would be far too high
     // also fixes mouseMovementX sometimes getting stuck at a non 0 value when you stop moving the mouse by repeatedly dividing the value
     mouseMovementX = mouseMovementX / 100
