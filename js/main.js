@@ -6,8 +6,7 @@ let screenHeight = window.innerHeight;
 //     screenHeight = window.innerWidth;
 // };
 
-const canvas = document.createElement("canvas");
-document.body.append(canvas);
+const canvas = document.getElementById("canvas")
 
 canvas.width = screenWidth;
 canvas.height = screenHeight;
@@ -26,10 +25,6 @@ let wallColors = {
 let time = 0;
 let oldTime = 0;
 let deltaTime = 0;
-
-let keys = {};
-document.addEventListener("keydown", (e) => { keys[e.code] = true; });
-document.addEventListener("keyup", (e) => { keys[e.code] = false; });
 
 function raycast() {
     for (let x = 0; x < screenWidth; x++) {
@@ -128,54 +123,6 @@ function drawCeilingFloor(ceilingColor, floorColor) {
     ctx.beginPath();
     ctx.rect(0, 0, canvas.width, canvas.height / 2);
     ctx.fill();
-}
-
-function movement() {
-    // get delta time
-    oldTime = time;
-    time = Date.now();
-    deltaTime = (time - oldTime) / 1000;
-
-    let moveSpeed = deltaTime * 5;
-    let rotateSpeed = deltaTime * 2.5;
-
-    if (keys["KeyW"]) {
-        if (map[Math.floor(playerY)][Math.floor(playerX + dirX * moveSpeed)] === 0) { playerX += dirX * moveSpeed; }
-        if (map[Math.floor(playerY + dirY * moveSpeed)][Math.floor(playerX)] === 0) { playerY += dirY * moveSpeed; }
-    }
-
-    if (keys["KeyS"]) {
-        if (map[Math.floor(playerY)][Math.floor(playerX - dirX * moveSpeed)] === 0) { playerX -= dirX * moveSpeed; }
-        if (map[Math.floor(playerY - dirY * moveSpeed)][Math.floor(playerX)] === 0) { playerY -= dirY * moveSpeed; }
-    }
-
-    if (keys["KeyA"]) {
-        if (map[Math.floor(playerY)][Math.floor(playerX + dirY * moveSpeed)] === 0) { playerX += dirY * moveSpeed; }
-        if (map[Math.floor(playerY - dirX * moveSpeed)][Math.floor(playerX)] === 0) { playerY -= dirX * moveSpeed; }
-    }
-
-    if (keys["KeyD"]) {
-        if (map[Math.floor(playerY)][Math.floor(playerX - dirY * moveSpeed)] === 0) { playerX -= dirY * moveSpeed; }
-        if (map[Math.floor(playerY + dirX * moveSpeed)][Math.floor(playerX)] === 0) { playerY += dirX * moveSpeed; }
-    }
-
-    if (keys["ArrowLeft"]) {
-        let oldDirX = dirX;
-        dirX = dirX * Math.cos(-rotateSpeed) - dirY * Math.sin(-rotateSpeed);
-        dirY = oldDirX * Math.sin(-rotateSpeed) + dirY * Math.cos(-rotateSpeed);
-        let oldPlaneX = planeX;
-        planeX = planeX * Math.cos(-rotateSpeed) - planeY * Math.sin(-rotateSpeed);
-        planeY = oldPlaneX * Math.sin(-rotateSpeed) + planeY * Math.cos(-rotateSpeed);
-    }
-
-    if (keys["ArrowRight"]) {
-        let oldDirX = dirX;
-        dirX = dirX * Math.cos(rotateSpeed) - dirY * Math.sin(rotateSpeed);
-        dirY = oldDirX * Math.sin(rotateSpeed) + dirY * Math.cos(rotateSpeed);
-        let oldPlaneX = planeX;
-        planeX = planeX * Math.cos(rotateSpeed) - planeY * Math.sin(rotateSpeed);
-        planeY = oldPlaneX * Math.sin(rotateSpeed) + planeY * Math.cos(rotateSpeed);
-    }
 }
 
 // gameloop
