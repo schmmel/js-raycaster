@@ -10,12 +10,13 @@ function movement() {
 
     let moveSpeed = deltaTime * 5;
     let rotateSpeed = deltaTime * 2.5;
+    // multiplying moveSpeed by diagonalPenalty results in the distance traveled diagonally to be the same as going straight because pythagoras theory
     let diagonalPenalty = 0.708;
 
-    if (keys["KeyW"] && keys["KeyA"] ||
-        keys["KeyW"] && keys["KeyD"] ||
-        keys["KeyS"] && keys["KeyA"] ||
-        keys["KeyS"] && keys["KeyD"]) {
+    if (keys["KeyW"] && keys["KeyA"] && !keys["KeyD"] ||
+        keys["KeyW"] && keys["KeyD"] && !keys["KeyA"]  ||
+        keys["KeyS"] && keys["KeyA"] && !keys["KeyD"]  ||
+        keys["KeyS"] && keys["KeyD"] && !keys["KeyA"] ) {
         moveSpeed = moveSpeed * diagonalPenalty;
     }
 
