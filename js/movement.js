@@ -2,6 +2,9 @@ let keys = {};
 document.addEventListener("keydown", (e) => { keys[e.code] = true; });
 document.addEventListener("keyup", (e) => { keys[e.code] = false; });
 
+let mouseMovementX = 0;
+document.addEventListener("mousemove", (e) => { mouseMovementX = e.movementX});
+
 function movement() {
     // get delta time
     oldTime = time;
@@ -13,10 +16,10 @@ function movement() {
     // multiplying moveSpeed by diagonalPenalty results in the distance traveled diagonally to be the same as going straight because pythagoras theory
     let diagonalPenalty = 0.708;
 
-    if (keys["KeyW"] && keys["KeyA"] && !keys["KeyD"] ||
-        keys["KeyW"] && keys["KeyD"] && !keys["KeyA"]  ||
-        keys["KeyS"] && keys["KeyA"] && !keys["KeyD"]  ||
-        keys["KeyS"] && keys["KeyD"] && !keys["KeyA"] ) {
+    if ((keys["KeyW"] && keys["KeyA"] && !keys["KeyD"]) ||
+        (keys["KeyW"] && keys["KeyD"] && !keys["KeyA"]) ||
+        (keys["KeyS"] && keys["KeyA"] && !keys["KeyD"]) ||
+        (keys["KeyS"] && keys["KeyD"] && !keys["KeyA"])) {
         moveSpeed = moveSpeed * diagonalPenalty;
     }
 
@@ -56,5 +59,28 @@ function movement() {
         let oldPlaneX = planeX;
         planeX = planeX * Math.cos(rotateSpeed) - planeY * Math.sin(rotateSpeed);
         planeY = oldPlaneX * Math.sin(rotateSpeed) + planeY * Math.cos(rotateSpeed);
+    }
+
+    console.log(mouseMovementX)
+    // divided by 100 because raw values would be far too high
+    // also fixes mouseMovementX sometimes getting stuck at a non 0 value when you stop moving the mouse by repeatedly dividing the value
+    mouseMovementX = mouseMovementX / 100
+
+    if (mouseMovementX > 0 && document.pointerLockElement) {
+        let oldDirX = dirX;
+        dirX = dirX * Math.cos(mouseMovementX) - dirY * Math.sin(mouseMovementX);
+        dirY = oldDirX * Math.sin(mouseMovementX) + dirY * Math.cos(mouseMovementX);
+        let oldPlaneX = planeX;
+        planeX = planeX * Math.cos(mouseMovementX) - planeY * Math.sin(mouseMovementX);
+        planeY = oldPlaneX * Math.sin(mouseMovementX) + planeY * Math.cos(mouseMovementX);
+    }
+
+    if (mouseMovementX < 0 && document.pointerLockElement) {
+        let oldDirX = dirX;
+        dirX = dirX * Math.cos(mouseMovementX) - dirY * Math.sin(mouseMovementX);
+        dirY = oldDirX * Math.sin(mouseMovementX) + dirY * Math.cos(mouseMovementX);
+        let oldPlaneX = planeX;
+        planeX = planeX * Math.cos(mouseMovementX) - planeY * Math.sin(mouseMovementX);
+        planeY = oldPlaneX * Math.sin(mouseMovementX) + planeY * Math.cos(mouseMovementX);
     }
 }

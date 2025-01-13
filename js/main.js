@@ -11,6 +11,10 @@ const canvas = document.getElementById("canvas")
 canvas.width = screenWidth;
 canvas.height = screenHeight;
 
+canvas.addEventListener("click", async () => {
+    canvas.requestPointerLock();
+});
+
 const ctx = canvas.getContext("2d");
 
 let playerX = 2.5, playerY = 13;
