@@ -23,8 +23,23 @@ let planeX = .85, planeY = 0;
 
 let wallColors = {
     1: [128, 0, 128],
-    2: [223, 12, 68]
+    2: [223, 12, 68],
+    9: [
+        [255, 0, 0],
+        [255, 154, 0],
+        [208, 222, 33],
+        [79, 220, 74],
+        [63, 218, 216],
+        [47, 201, 226],
+        [28, 127, 238],
+        [95, 21, 242],
+        [186, 12, 248],
+        [251, 7, 217]
+    ]
 };
+
+let rainbowI = 0;
+let framesPerRainbowColor = 6;
 
 let time = 0;
 let oldTime = 0;
@@ -100,7 +115,14 @@ function raycast() {
         if (drawStart < 0) { drawStart = 0; };
         if (drawEnd >= screenHeight) { drawEnd = screenHeight - 1; };
 
-        let color = wallColors[map[mapY][mapX]];
+        // if the wall is hot pink something went wrong
+        let color = [255, 105, 180];
+
+        if (map[mapY][mapX] === 9) {
+            color = wallColors[map[mapY][mapX]][Math.floor(rainbowI / framesPerRainbowColor)];        
+        } else {
+            color = wallColors[map[mapY][mapX]];
+        }
 
         // slightly darker colors on walls one of the axes
         if (side === 1) {
@@ -138,6 +160,9 @@ function loop() {
 
     // do the magic
     raycast();
+
+    rainbowI++
+    if (rainbowI >= wallColors[9].length * framesPerRainbowColor) { rainbowI = 0; }
 
     movement();
 
