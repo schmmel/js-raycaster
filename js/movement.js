@@ -5,44 +5,41 @@ document.addEventListener("keyup", (e) => { keys[e.code] = false; });
 let mouseMovementX = 0;
 document.addEventListener("mousemove", (e) => { mouseMovementX = e.movementX; });
 
+window.addEventListener("gamepadconnected", (e) => { controller = e.gamepad; });
+window.addEventListener("gamepaddisconnected", (e) => { controller = null })
+
 let gamecubeButtons = ["X", "A", "B", "Y", "Left Trigger", "Right Trigger", null, "Z", null, "Start", null, null, "Up", "Right", "Down", "Left"]
 
-window.addEventListener("gamepadconnected", (e) => { controller = e.gamepad; });
-window.addEventListener("gamepaddisconnected", (e) => { controller = {}; })
-let controller = {};
+let controller = null;
 let buttons = [];
 let axes = [];
 
+let leftStickDeadzone = .3;
+let cStickDeadzone = .1;
+
 function gamepadUpdateHandler() {
+    gamecubeDebugging();
+
     buttons = [];
     axes = [];
 
     if (controller.buttons) {
         for (let i = 0; i < controller.buttons.length; i++) {
             if (controller.buttons[i].pressed) {
-                buttons.push(gamecubeButtons[i]);
+                buttons[gamecubeButtons[i]] = gamecubeButtons[i];
             }
         }
-        ctx.font = "16px Arial";
-        ctx.fillText(buttons, 10, 25)
     }
 
     if (controller.axes) {
-        ctx.fillText(controller.axes[0], 10, 41); // left stick left right
-        ctx.fillText(controller.axes[1], 10, 57); // left stick up down
-        ctx.fillText(controller.axes[2], 10, 73); // c stick up down
-        ctx.fillText(controller.axes[3], 10, 89); // left trigger
-        ctx.fillText(controller.axes[4], 10, 105); // right trigger
-        ctx.fillText(controller.axes[5], 10, 121); // c stick left right
-        ctx.fillText(controller.axes[6], 10, 137); // dpad left right
-        ctx.fillText(controller.axes[7], 10, 153); // dpad up down
+        for (let i = 0; i < controller.axes.length; i++) {
+            axes[i] = controller.axes[i]
+        }
     }
-    // console.log(buttonsPressed);
+
 }
 
 function movement() {
-    gamepadUpdateHandler()
-
     // get delta time
     oldTime = time;
     time = Date.now();
@@ -57,29 +54,36 @@ function movement() {
     // value might need to be adjusted if i change moveSpeed
     let diagonalPenalty = 0.708;
 
-    if ((keys["KeyW"] && keys["KeyA"] && !keys["KeyD"]) ||
-        (keys["KeyW"] && keys["KeyD"] && !keys["KeyA"]) ||
-        (keys["KeyS"] && keys["KeyA"] && !keys["KeyD"]) ||
-        (keys["KeyS"] && keys["KeyD"] && !keys["KeyA"])) {
+    let directions = {};
+
+    if (keys["KeyW"] || buttons["Up"] || axes[1] < -leftStickDeadzone) { directions["forward"] = 1; }
+    if (keys["KeyS"] || buttons["Down"] || axes[1] > leftStickDeadzone) { directions["backward"] = 1; }
+    if (keys["KeyA"] || buttons["Left"] || axes[0] < -leftStickDeadzone) { directions["left"] = 1; }
+    if (keys["KeyD"] || buttons["Right"] || axes[0] > leftStickDeadzone) { directions["right"] = 1; }
+
+    if ((directions["forward"] && directions["left"] && !directions["right"]) ||
+        (directions["forward"] && directions["right"] && !directions["left"]) ||
+        (directions["backward"] && directions["left"] && !directions["right"]) ||
+        (directions["backward"] && directions["right"] && !directions["left"])) {
         moveSpeed = moveSpeed * diagonalPenalty;
     }
 
-    if (keys["KeyW"]) {
+    if (directions["forward"]) {
         if (map[Math.floor(playerY)][Math.floor(playerX + dirX * moveSpeed)] === 0) { playerX += dirX * moveSpeed; }
         if (map[Math.floor(playerY + dirY * moveSpeed)][Math.floor(playerX)] === 0) { playerY += dirY * moveSpeed; }
     }
 
-    if (keys["KeyS"]) {
+    if (directions["backward"]) {
         if (map[Math.floor(playerY)][Math.floor(playerX - dirX * moveSpeed)] === 0) { playerX -= dirX * moveSpeed; }
         if (map[Math.floor(playerY - dirY * moveSpeed)][Math.floor(playerX)] === 0) { playerY -= dirY * moveSpeed; }
     }
 
-    if (keys["KeyA"]) {
+    if (directions["left"]) {
         if (map[Math.floor(playerY)][Math.floor(playerX + dirY * moveSpeed)] === 0) { playerX += dirY * moveSpeed; }
         if (map[Math.floor(playerY - dirX * moveSpeed)][Math.floor(playerX)] === 0) { playerY -= dirX * moveSpeed; }
     }
 
-    if (keys["KeyD"]) {
+    if (directions["right"]) {
         if (map[Math.floor(playerY)][Math.floor(playerX - dirY * moveSpeed)] === 0) { playerX -= dirY * moveSpeed; }
         if (map[Math.floor(playerY + dirX * moveSpeed)][Math.floor(playerX)] === 0) { playerY += dirX * moveSpeed; }
     }
@@ -115,7 +119,18 @@ function movement() {
         planeY = oldPlaneX * Math.sin(mouseMovementX) + planeY * Math.cos(mouseMovementX);
     }
 
-    // if () {
-        
-    // }
+    if (controller) {
+        gamepadUpdateHandler()
+
+        // axes[5] = c stick left right
+        if (axes[5] >= cStickDeadzone || axes[5] <= -cStickDeadzone) {
+            let cMovement = axes[5] / 8;
+            let oldDirX = dirX;
+            dirX = dirX * Math.cos(cMovement) - dirY * Math.sin(cMovement);
+            dirY = oldDirX * Math.sin(cMovement) + dirY * Math.cos(cMovement);
+            let oldPlaneX = planeX;
+            planeX = planeX * Math.cos(cMovement) - planeY * Math.sin(cMovement);
+            planeY = oldPlaneX * Math.sin(cMovement) + planeY * Math.cos(cMovement);
+        }
+    }
 }
