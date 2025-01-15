@@ -8,26 +8,26 @@ document.addEventListener("mousemove", (e) => { mouseMovementX = e.movementX; })
 let gamecubeButtons = ["X", "A", "B", "Y", "Left Trigger", "Right Trigger", null, "Z", null, "Start", null, null, "Up", "Right", "Down", "Left"]
 
 window.addEventListener("gamepadconnected", (e) => { controller = e.gamepad; });
+window.addEventListener("gamepaddisconnected", (e) => { controller = {}; })
 let controller = {};
-let buttonsPressed = [];
+let buttons = [];
 let axes = [];
 
 function gamepadUpdateHandler() {
-    buttonsPressed = [];
+    buttons = [];
     axes = [];
 
     if (controller.buttons) {
         for (let i = 0; i < controller.buttons.length; i++) {
             if (controller.buttons[i].pressed) {
-                buttonsPressed.push(gamecubeButtons[i]);
+                buttons.push(gamecubeButtons[i]);
             }
         }
         ctx.font = "16px Arial";
-        ctx.fillText(buttonsPressed, 10, 25)
+        ctx.fillText(buttons, 10, 25)
     }
 
     if (controller.axes) {
-        ctx.font = "16px Arial";
         ctx.fillText(controller.axes[0], 10, 41); // left stick left right
         ctx.fillText(controller.axes[1], 10, 57); // left stick up down
         ctx.fillText(controller.axes[2], 10, 73); // c stick up down
@@ -106,7 +106,7 @@ function movement() {
     // also fixes mouseMovementX sometimes getting stuck at a non 0 value when you stop moving the mouse
     mouseMovementX = mouseMovementX / 100
 
-    if (mouseMovementX > 0 && document.pointerLockElement) {
+    if (mouseMovementX !== 0 && document.pointerLockElement) {
         let oldDirX = dirX;
         dirX = dirX * Math.cos(mouseMovementX) - dirY * Math.sin(mouseMovementX);
         dirY = oldDirX * Math.sin(mouseMovementX) + dirY * Math.cos(mouseMovementX);
@@ -115,12 +115,7 @@ function movement() {
         planeY = oldPlaneX * Math.sin(mouseMovementX) + planeY * Math.cos(mouseMovementX);
     }
 
-    if (mouseMovementX < 0 && document.pointerLockElement) {
-        let oldDirX = dirX;
-        dirX = dirX * Math.cos(mouseMovementX) - dirY * Math.sin(mouseMovementX);
-        dirY = oldDirX * Math.sin(mouseMovementX) + dirY * Math.cos(mouseMovementX);
-        let oldPlaneX = planeX;
-        planeX = planeX * Math.cos(mouseMovementX) - planeY * Math.sin(mouseMovementX);
-        planeY = oldPlaneX * Math.sin(mouseMovementX) + planeY * Math.cos(mouseMovementX);
-    }
+    // if () {
+        
+    // }
 }

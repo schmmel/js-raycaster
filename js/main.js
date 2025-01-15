@@ -119,7 +119,7 @@ function raycast() {
         let color = [255, 105, 180];
 
         if (map[mapY][mapX] === 9) {
-            color = wallColors[map[mapY][mapX]][Math.floor(rainbowI / framesPerRainbowColor)];        
+            color = wallColors[map[mapY][mapX]][Math.floor(rainbowI / framesPerRainbowColor)];
         } else {
             color = wallColors[map[mapY][mapX]];
         }
@@ -165,7 +165,7 @@ function loop() {
     if (rainbowI >= wallColors[9].length * framesPerRainbowColor) { rainbowI = 0; }
 
     movement();
-    
+
     requestAnimationFrame(loop);
 }
 
