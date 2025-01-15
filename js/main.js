@@ -165,7 +165,7 @@ function loop() {
     if (rainbowI >= wallColors[9].length * framesPerRainbowColor) { rainbowI = 0; }
 
     movement();
-
+    
     requestAnimationFrame(loop);
 }
 
