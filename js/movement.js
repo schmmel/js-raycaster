@@ -14,8 +14,8 @@ let controller = null;
 let buttons = {};
 let axes = [];
 
-let leftStickDeadzone = .3;
-let cStickDeadzone = .1;
+let leftStickDeadzone = .25;
+let cStickDeadzone = .05;
 
 function gamepadUpdateHandler() {
     // gamecubeDebugging();

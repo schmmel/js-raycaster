@@ -22,6 +22,8 @@ function raycast() {
         let hit = 0;
         let side;
 
+        let sprite = {};
+
         if (rayDirX < 0) {
             stepX = -1;
             sideDistX = (playerX - mapX) * deltaDistX;
@@ -49,7 +51,13 @@ function raycast() {
                 side = 1;
             }
 
-            if (map[mapY][mapX] > 0) {
+            if (sprites[mapY]?.[mapX]) {
+                sprite.name = sprites[mapY][mapX];
+                sprite.y = mapY;
+                sprite.x = mapX;
+            }
+
+            if (map[mapY][mapX] != 0) {
                 hit = 1;
             }
         }
@@ -84,45 +92,58 @@ function raycast() {
 
         drawLine(x, drawStart, drawEnd, color);
 
+        if (sprite.name) {
+            // drawSprite(sprite)
+        }
+
+
         // console.log(lineHeight)
     }
 }
 
 function loadImages() {
-    console.log("loadImages()")
-    this.textureImageDatas = []
-    this.texturesLoadedCount = 0
-    this.texturesLoaded = false
+    // this.textureImageDatas = []
+    // this.texturesLoadedCount = 0
+    // this.texturesLoaded = false
 
-    this.imageconf = [
-      {"id" : "barrelImageData","src" : "img/barrel.png"},
+    let images = [
+        { "id": "barrel", "src": "img/barrel.png" },
     ];
 
     let divTextures = document.getElementById("textures")
-    let this2 = this
-    for (let imageconf of this.imageconf) {
-      let src = imageconf.src;
-      let img = document.createElement("img")
-      img.onload = function() {
-        console.log("img src loaded " + img.src)
 
-        // Draw images on this temporary canvas to grab the ImageData pixels
-        let canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        let context = canvas.getContext('2d')
-        context.drawImage(img, 0, 0, img.width, img.height)
-        console.log(imageconf.id + " size = (" + img.width + ", " + img.height + ")")
-
-        // Assign ImageData to a variable with same name as imageconf.id
-        this2[imageconf.id] = context.getImageData(0, 0, img.width, img.height)
-
-        this2.texturesLoadedCount++
-        this2.texturesLoaded = this2.texturesLoadedCount == this2.imageconf.length
-      };
-      divTextures.appendChild(img)
-      img.src = src
+    for (let i = 0; i < images.length; i++) {
+        let src = images[i].src;
+        let img = document.createElement("img")
+        img.id = images[i].id
+        divTextures.appendChild(img)
+        img.src = src
     }
+
+    // let this2 = this
+
+    // img.onload = function () {
+    //     console.log("img src loaded " + img.src)
+
+    //     // Draw images on this temporary canvas to grab the ImageData pixels
+    //     let canvas = document.createElement('canvas');
+    //     canvas.width = img.width;
+    //     canvas.height = img.height;
+    //     let context = canvas.getContext('2d')
+    //     context.drawImage(img, 0, 0, img.width, img.height)
+    //     console.log(imageconf.id + " size = (" + img.width + ", " + img.height + ")")
+
+    //     // Assign ImageData to a variable with same name as imageconf.id
+    //     this2[imageconf.id] = context.getImageData(0, 0, img.width, img.height)
+
+    //     this2.texturesLoadedCount++
+    //     this2.texturesLoaded = this2.texturesLoadedCount == this2.imageconf.length
+    // };
+}
+
+function drawSprite(sprite) {
+    texture = document.getElementById(sprite.name)
+    ctx.drawImage(texture, sprite.y * 25, sprite.x * 25)
 }
 
 function drawLine(x, y1, y2, color) {
