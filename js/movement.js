@@ -11,16 +11,16 @@ window.addEventListener("gamepaddisconnected", (e) => { controller = null })
 let gamecubeButtons = ["X", "A", "B", "Y", "Left Trigger", "Right Trigger", null, "Z", null, "Start", null, null, "Up", "Right", "Down", "Left"]
 
 let controller = null;
-let buttons = [];
+let buttons = {};
 let axes = [];
 
 let leftStickDeadzone = .3;
 let cStickDeadzone = .1;
 
 function gamepadUpdateHandler() {
-    gamecubeDebugging();
+    // gamecubeDebugging();
 
-    buttons = [];
+    buttons = {};
     axes = [];
 
     if (controller.buttons) {

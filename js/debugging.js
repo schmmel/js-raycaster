@@ -1,6 +1,7 @@
 function gamecubeDebugging() {
     ctx.font = "16px Arial";
-    ctx.fillText(buttons, 10, 25);
+    console.log(buttons)
+    ctx.fillText(buttons, 10, 25); // buttons used to be an array but now its an object so this dont work
     ctx.fillText(axes[0], 10, 41); // left stick left right
     ctx.fillText(axes[1], 10, 57); // left stick up down
     ctx.fillText(axes[2], 10, 73); // c stick up down
