@@ -93,7 +93,7 @@ function raycast() {
         drawLine(x, drawStart, drawEnd, color);
 
         if (sprite.name) {
-            // drawSprite(sprite)
+            drawSprite(sprite)
         }
 
 
@@ -142,8 +142,9 @@ function loadImages() {
 }
 
 function drawSprite(sprite) {
-    texture = document.getElementById(sprite.name)
-    ctx.drawImage(texture, sprite.y * 25, sprite.x * 25)
+    // texture = document.getElementById(sprite.name)
+    ctx.font = "16px Arial";
+    ctx.fillText(`${sprite.y}, ${sprite.x}`, sprite.y * 30 - 20, sprite.x * 25);
 }
 
 function drawLine(x, y1, y2, color) {
