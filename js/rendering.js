@@ -93,7 +93,7 @@ function raycast() {
         drawLine(x, drawStart, drawEnd, color);
 
         if (sprite.name) {
-            drawSprite(sprite)
+            drawSprite(sprite, x)
         }
 
 
@@ -102,10 +102,6 @@ function raycast() {
 }
 
 function loadImages() {
-    // this.textureImageDatas = []
-    // this.texturesLoadedCount = 0
-    // this.texturesLoaded = false
-
     let images = [
         { "id": "barrel", "src": "img/barrel.png" },
     ];
@@ -119,32 +115,13 @@ function loadImages() {
         divTextures.appendChild(img)
         img.src = src
     }
-
-    // let this2 = this
-
-    // img.onload = function () {
-    //     console.log("img src loaded " + img.src)
-
-    //     // Draw images on this temporary canvas to grab the ImageData pixels
-    //     let canvas = document.createElement('canvas');
-    //     canvas.width = img.width;
-    //     canvas.height = img.height;
-    //     let context = canvas.getContext('2d')
-    //     context.drawImage(img, 0, 0, img.width, img.height)
-    //     console.log(imageconf.id + " size = (" + img.width + ", " + img.height + ")")
-
-    //     // Assign ImageData to a variable with same name as imageconf.id
-    //     this2[imageconf.id] = context.getImageData(0, 0, img.width, img.height)
-
-    //     this2.texturesLoadedCount++
-    //     this2.texturesLoaded = this2.texturesLoadedCount == this2.imageconf.length
-    // };
 }
 
-function drawSprite(sprite) {
+function drawSprite(sprite, x) {
     // texture = document.getElementById(sprite.name)
     ctx.font = "16px Arial";
     ctx.fillText(`${sprite.y}, ${sprite.x}`, sprite.y * 30 - 20, sprite.x * 25);
+    drawLine(Math.round(x / 10) * 10, screenHeight * .3, screenHeight * .7, [224,231,34])
 }
 
 function drawLine(x, y1, y2, color) {

@@ -48,7 +48,7 @@ const map = [
 
 let sprites = {
 	1: {1: "barrel"},
-	4: {4: "barrel", 5:"barrel"},
+	4: {4: "barrel"},
 	5: {6: "barrel"},
 	6: {6: "barrel"},
 }
