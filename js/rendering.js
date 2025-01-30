@@ -119,9 +119,9 @@ function loadImages() {
 
 function drawSprite(sprite, x) {
     // texture = document.getElementById(sprite.name)
-    ctx.font = "16px Arial";
-    ctx.fillText(`${sprite.y}, ${sprite.x}`, sprite.y * 30 - 20, sprite.x * 25);
-    drawLine(Math.round(x / 10) * 10, screenHeight * .3, screenHeight * .7, [224,231,34])
+    // ctx.font = "16px Arial";
+    // ctx.fillText(`${sprite.y}, ${sprite.x}`, sprite.y * 30 - 20, sprite.x * 25);
+    // drawLine(Math.round(x / 10) * 10, screenHeight * .3, screenHeight * .7, [224,231,34])
 }
 
 function drawLine(x, y1, y2, color) {
